@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">WhereUAt</string>
-    <string name="title_meeting_detail">Meeting Detail</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 
 </resources>
