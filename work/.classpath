@@ -5,15 +5,6 @@
 	<classpathentry exported="true" kind="con" path="com.android.ide.eclipse.adt.DEPENDENCIES"/>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="src" path="gen"/>
-	<classpathentry exported="true" kind="lib" path="/home/mint/Android/google-play-services_lib/libs/google-play-services.jar"/>
-	<classpathentry exported="true" kind="src" path="/google-play-services_lib"/>
-	<classpathentry kind="lib" path="/home/mint/Android/android-sdk-linux/platforms/android-19/android.jar" sourcepath="/home/mint/Android/android-sdk-linux/sources/android-19">
-		<attributes>
-			<attribute name="javadoc_location" value="file:/home/mint/Android/android-sdk-linux/docs/reference"/>
-		</attributes>
-		<accessrules>
-			<accessrule kind="nonaccessible" pattern="com/android/internal/**"/>
-		</accessrules>
-	</classpathentry>
+	<classpathentry combineaccessrules="false" kind="src" path="/WhereUAt-testing"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>

@@ -1,16 +1,16 @@
 package com.example.whereuat;
 
+import android.app.Activity;
+import android.location.Location;
+import android.os.Bundle;
+import android.view.View;
+
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
-
-import android.app.Activity;
-import android.location.Location;
-import android.os.Bundle;
-import android.view.View;
 
 public class MainActivity extends Activity 
 {
@@ -25,8 +25,8 @@ public class MainActivity extends Activity
     protected void onCreate(Bundle savedInstanceState) 
     {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);        
-        map = ((MapFragment)getFragmentManager().findFragmentById(R.id.map)).getMap();
+//        setContentView(R.layout.activity_main);        
+//        map = ((MapFragment)getFragmentManager().findFragmentById(R.id.map)).getMap();
         
         map.setMyLocationEnabled(true);        
     }
