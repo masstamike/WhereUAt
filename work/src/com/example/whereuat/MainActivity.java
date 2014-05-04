@@ -3,6 +3,7 @@ package com.example.whereuat;
 import android.annotation.TargetApi;
 import android.app.Fragment;
 import android.app.FragmentManager;
+import android.content.Intent;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -196,6 +197,8 @@ public class MainActivity extends ActionBarActivity
         switch (item.getItemId()) {
         	case R.id.action_add:
         		//open new activity to create event
+        		Intent intent = new Intent(this, NewEventActivity.class);
+        	    startActivity(intent);
         		return true;
             case R.id.action_swap_map:
             	onClick_Toggle();
