@@ -9,6 +9,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,6 +28,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
+
 public class MainActivity extends ActionBarActivity
 {
 	private DrawerLayout mDrawerLayout;
@@ -49,7 +51,7 @@ public class MainActivity extends ActionBarActivity
 	        selectItem(position);
 	    }
 	}
-
+	
 	/** Swaps fragments in the main content view */
 	private void selectItem(int position) {
 	    //Do something with the map
@@ -81,15 +83,23 @@ public class MainActivity extends ActionBarActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         
+        try {
+			map = ((MapFragment)getFragmentManager().findFragmentById(R.id.map)).getMap();
+			map.setMyLocationEnabled(true);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        
         Fragment fragment = new PlaceFragment();
         Bundle args = new Bundle();
         args.putInt(PlaceFragment.ARG_PLACE_NUMBER, 0);
         fragment.setArguments(args);
 
-        FragmentManager fragmentManager = getFragmentManager();
+/*        FragmentManager fragmentManager = getFragmentManager();
         fragmentManager.beginTransaction()
                        .replace(R.id.content_frame, fragment)
-                       .commit();
+                       .commit();*/
         
         mPlaceTitles = getResources().getStringArray(R.array.places_array);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -153,12 +163,17 @@ public class MainActivity extends ActionBarActivity
     
     public void onClick_myLocation()
     {
-    	map = ((MapFragment)getFragmentManager().findFragmentById(R.id.map)).getMap();
-    	Location myLoc = map.getMyLocation();
-    	LOC_ME = new LatLng(myLoc.getLatitude(), myLoc.getLongitude());
-    	map.addMarker(new MarkerOptions().position(LOC_ME).title("You are here!"));
-    	CameraUpdate update = CameraUpdateFactory.newLatLngZoom(LOC_ME, 19);
-    	map.animateCamera(update);
+    	try {
+    		Location myLoc = map.getMyLocation();
+			LOC_ME = new LatLng(myLoc.getLatitude(), myLoc.getLongitude());
+			map.addMarker(new MarkerOptions().position(LOC_ME).title("You are here!"));
+			CameraUpdate update = CameraUpdateFactory.newLatLngZoom(LOC_ME, 19);
+			map.animateCamera(update);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			Log.d("Error","This error is due to the myLocation button");
+		}
     }
 
     public static class PlaceFragment extends Fragment {
