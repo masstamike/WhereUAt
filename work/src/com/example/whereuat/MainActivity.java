@@ -2,11 +2,11 @@ package com.example.whereuat;
 
 import android.annotation.TargetApi;
 import android.app.Fragment;
-import android.app.FragmentManager;
 import android.content.Intent;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
@@ -35,8 +35,7 @@ public class MainActivity extends ActionBarActivity
 	private ListView mDrawerList;
 	private CharSequence mTitle;
 	private String[] mPlaceTitles;
-
-	private GoogleMap map;
+    private GoogleMap map;
 	
 	// LatLng values
 	private final LatLng LOC_CHICO  = new LatLng(39.729676,-121.847957);
@@ -95,11 +94,6 @@ public class MainActivity extends ActionBarActivity
         Bundle args = new Bundle();
         args.putInt(PlaceFragment.ARG_PLACE_NUMBER, 0);
         fragment.setArguments(args);
-
-/*        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-                       .replace(R.id.content_frame, fragment)
-                       .commit();*/
         
         mPlaceTitles = getResources().getStringArray(R.array.places_array);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -107,27 +101,6 @@ public class MainActivity extends ActionBarActivity
         mDrawerList.setAdapter(new ArrayAdapter<String>(this,
                 R.layout.drawer_list_item, mPlaceTitles));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-
-
-//        map = ((MapFragment)getFragmentManager().findFragmentById(R.id.map)).getMap();
-        
-//        map.setMyLocationEnabled(true);
-        
-/*        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-                       .replace(R.id.content_frame, fragment)
-                       .commit();
-
-
-        mTitle = getTitle();
-        mPlanetTitles = getResources().getStringArray(R.array.places_array);
-        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-        mDrawerList = (ListView) findViewById(R.id.left_drawer);
-
-        // set up the drawer's list view with items and click listener
-        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-                R.layout.drawer_list_item, mPlanetTitles));*/
-//        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 
     }
     

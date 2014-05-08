@@ -1177,13 +1177,14 @@ containing a value of this type.
         public static final int common_signin_btn_text_pressed_light=0x7f02006e;
         public static final int ic_action_map=0x7f02006f;
         public static final int ic_action_new=0x7f020070;
-        public static final int ic_launcher=0x7f020071;
-        public static final int ic_plusone_medium_off_client=0x7f020072;
-        public static final int ic_plusone_small_off_client=0x7f020073;
-        public static final int ic_plusone_standard_off_client=0x7f020074;
-        public static final int ic_plusone_tall_off_client=0x7f020075;
-        public static final int whereuat=0x7f020076;
-        public static final int whereuat2=0x7f020077;
+        public static final int ic_drawer=0x7f020071;
+        public static final int ic_launcher=0x7f020072;
+        public static final int ic_plusone_medium_off_client=0x7f020073;
+        public static final int ic_plusone_small_off_client=0x7f020074;
+        public static final int ic_plusone_standard_off_client=0x7f020075;
+        public static final int ic_plusone_tall_off_client=0x7f020076;
+        public static final int whereuat=0x7f020077;
+        public static final int whereuat2=0x7f020078;
     }
     public static final class id {
         public static final int action_add=0x7f050048;
@@ -1463,9 +1464,12 @@ containing a value of this type.
         /**  Long form sign-in button text [CHAR LIMIT=30] 
          */
         public static final int common_signin_button_text_long=0x7f0a0020;
+        public static final int drawer_close=0x7f0a002e;
+        public static final int drawer_open=0x7f0a002d;
         /**  Location client code resources (prefix with location_client) 
          */
         public static final int location_client_powered_by_google=0x7f0a0027;
+        public static final int pick_date=0x7f0a002f;
         public static final int pick_time=0x7f0a002c;
     }
     public static final class style {
