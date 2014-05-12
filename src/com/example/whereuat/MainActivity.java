@@ -38,6 +38,7 @@ public class MainActivity extends ActionBarActivity
 	private CharSequence mTitle;
 	private String[] mPlaceTitles;
     private GoogleMap map;
+    private double nav_lat, nav_long;
     
 	// LatLng values
 	private final LatLng LOC_CHICO  = new LatLng(39.729676,-121.847957);
@@ -107,23 +108,29 @@ public class MainActivity extends ActionBarActivity
     
     public void onClick_Taipei()
     {
-    	CameraUpdate update = CameraUpdateFactory.newLatLngZoom(LOC_TAIPEI, 18);
+    	CameraUpdate update = CameraUpdateFactory.newLatLngZoom(LOC_TAIPEI, 18);    	
     	map = ((MapFragment)getFragmentManager().findFragmentById(R.id.map)).getMap();
     	map.animateCamera(update);
+    	nav_lat = LOC_TAIPEI.latitude;
+    	nav_long = LOC_TAIPEI.longitude;
     }
     
     public void onClick_Chico()
     {
     	CameraUpdate update = CameraUpdateFactory.newLatLngZoom(LOC_CHICO, 18);
     	map = ((MapFragment)getFragmentManager().findFragmentById(R.id.map)).getMap();
-    	map.animateCamera(update);    	
+    	map.animateCamera(update);   
+    	nav_lat = LOC_CHICO.latitude;
+    	nav_long = LOC_CHICO.longitude;
     }
     
     public void onClick_Home()
     {
     	CameraUpdate update = CameraUpdateFactory.newLatLngZoom(LOC_HOME, 18);
     	map = ((MapFragment)getFragmentManager().findFragmentById(R.id.map)).getMap();
-    	map.animateCamera(update);	
+    	map.animateCamera(update);
+    	nav_lat = LOC_HOME.latitude;
+    	nav_long = LOC_HOME.longitude;
     }
     
     public void onClick_Toggle()
@@ -143,6 +150,8 @@ public class MainActivity extends ActionBarActivity
 			map.addMarker(new MarkerOptions().position(LOC_ME).title("You are here!"));
 			CameraUpdate update = CameraUpdateFactory.newLatLngZoom(LOC_ME, 19);
 			map.animateCamera(update);
+	    	nav_lat = LOC_ME.latitude;
+	    	nav_long = LOC_ME.longitude;
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -195,8 +204,10 @@ public class MainActivity extends ActionBarActivity
             case R.id.begin_navigation:            	
 				try {
 					Intent nav_intent = new Intent(this, NavigationActivity.class);
-	            	nav_intent.putExtra("lat", 39.729676);
-	            	nav_intent.putExtra("long", -121.847957);
+	            	//nav_intent.putExtra("lat", 39.729676);
+	            	//nav_intent.putExtra("long", -121.847957);
+	            	nav_intent.putExtra("lat", nav_lat);
+	            	nav_intent.putExtra("long", nav_long);
 	            	nav_intent.putExtra("name", "Chico State");
 	            	startActivity(nav_intent);
 				} catch (Exception e) {

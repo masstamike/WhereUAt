@@ -1,5 +1,7 @@
 package com.example.whereuat;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.Date;
 
 import com.google.android.gms.maps.model.LatLng;
@@ -30,6 +32,7 @@ public class NavigationActivity extends ActionBarActivity implements SensorEvent
 {
 	float currentDistance, heading, bearing;
 	float currentDegree = 0f;
+	final double METERS_TO_MILES = 0.0006213f;
 	TextView tv1;
 	TextView tv2;
 	TextView tv3;
@@ -52,7 +55,7 @@ public class NavigationActivity extends ActionBarActivity implements SensorEvent
 			tv1.setText("dest: " + getIntent().getStringExtra("name"));
 			tv2.setText(String.valueOf("my lat: " + location.getLatitude()));
 			tv3.setText(String.valueOf("my long: " + location.getLongitude()));
-			tv4.setText(String.valueOf("distance: " + location.distanceTo(dest)));
+			tv4.setText("distance: " + getDistanceString(location.distanceTo(dest)));
 			tv5.setText(String.valueOf("bearing: " + location.bearingTo(dest)));
 		}
 
@@ -101,6 +104,7 @@ public class NavigationActivity extends ActionBarActivity implements SensorEvent
 		dest = new Location("dest");
 		dest.setLatitude(getIntent().getDoubleExtra("lat", 0));
 		dest.setLongitude(getIntent().getDoubleExtra("long", 0));
+		dest.setLongitude(getIntent().getDoubleExtra("long", 0));
 		dest.setTime(new Date().getTime());
 		
 		// Setup sensor manager
@@ -143,6 +147,24 @@ public class NavigationActivity extends ActionBarActivity implements SensorEvent
 		return super.onOptionsItemSelected(item);
 	}
 
+	// Helper methods
+	public String getDistanceString(double meters)
+	{
+		double miles = meters*METERS_TO_MILES;
+		if(miles > 0.1)
+			return String.valueOf(round(miles, 2) + " miles");
+		else
+			return String.valueOf(round(miles*5280, 2) + " feet");
+	}
+	
+	public static double round(double value, int places) {
+	    if (places < 0) throw new IllegalArgumentException();
+
+	    BigDecimal bd = new BigDecimal(value);
+	    bd = bd.setScale(places, RoundingMode.HALF_UP);
+	    return bd.doubleValue();
+	}
+	
 	/**
 	 * A placeholder fragment containing a simple view.
 	 */
@@ -169,7 +191,7 @@ public class NavigationActivity extends ActionBarActivity implements SensorEvent
 	@Override
 	public void onSensorChanged(SensorEvent event) 
 	{
-		heading = Math.round(event.values[0]);
+		heading = Math.round(event.values[0]); // Temporary fix for magnetic declination 
 		tv6.setText("Compass heading: " + Float.toString(heading) + " degrees");
 		compass_image.setRotation(-(heading - bearing));
 	}
