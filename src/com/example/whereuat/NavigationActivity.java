@@ -28,6 +28,7 @@ import android.widget.TextView;
 
 public class NavigationActivity extends ActionBarActivity implements SensorEventListener
 {
+	float currentDistance;
 	float currentDegree = 0f;
 	TextView tv1;
 	TextView tv2;
@@ -46,7 +47,7 @@ public class NavigationActivity extends ActionBarActivity implements SensorEvent
 		@Override
 		public void onLocationChanged(Location location) {
 			// Update navigation metrics
-			
+			currentDistance = location.distanceTo(dest);
 			tv1.setText("dest: " + getIntent().getStringExtra("name"));
 			tv2.setText(String.valueOf("my lat: " + location.getLatitude()));
 			tv3.setText(String.valueOf("my long: " + location.getLongitude()));
