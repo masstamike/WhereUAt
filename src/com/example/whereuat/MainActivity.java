@@ -2,8 +2,11 @@ package com.example.whereuat;
 
 import android.annotation.TargetApi;
 import android.app.Fragment;
+import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -35,7 +38,7 @@ public class MainActivity extends ActionBarActivity
 	private CharSequence mTitle;
 	private String[] mPlaceTitles;
     private GoogleMap map;
-	
+    
 	// LatLng values
 	private final LatLng LOC_CHICO  = new LatLng(39.729676,-121.847957);
 	private final LatLng LOC_HOME   = new LatLng(38.945694,-121.119814);
@@ -100,8 +103,7 @@ public class MainActivity extends ActionBarActivity
         mDrawerList.setAdapter(new ArrayAdapter<String>(this,
                 R.layout.drawer_list_item, mPlaceTitles));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-
-    }
+   }
     
     public void onClick_Taipei()
     {
@@ -190,9 +192,22 @@ public class MainActivity extends ActionBarActivity
             case R.id.action_swap_map:
             	onClick_Toggle();
                 return true;
+            case R.id.begin_navigation:            	
+				try {
+					Intent nav_intent = new Intent(this, NavigationActivity.class);
+	            	nav_intent.putExtra("lat", 39.729676);
+	            	nav_intent.putExtra("long", -121.847957);
+	            	nav_intent.putExtra("name", "Chico State");
+	            	startActivity(nav_intent);
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+					Log.d("Error", "Error pushing navigation menu button.");
+			}
+            	return true;
             case R.id.action_settings:
-                //openSettings();
-                return true;
+                //openSettings();            	
+            	return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
