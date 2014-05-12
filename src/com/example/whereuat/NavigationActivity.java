@@ -28,7 +28,7 @@ import android.widget.TextView;
 
 public class NavigationActivity extends ActionBarActivity implements SensorEventListener
 {
-	float currentDistance;
+	float currentDistance, heading, bearing;
 	float currentDegree = 0f;
 	TextView tv1;
 	TextView tv2;
@@ -48,6 +48,7 @@ public class NavigationActivity extends ActionBarActivity implements SensorEvent
 		public void onLocationChanged(Location location) {
 			// Update navigation metrics
 			currentDistance = location.distanceTo(dest);
+			bearing = location.bearingTo(dest);
 			tv1.setText("dest: " + getIntent().getStringExtra("name"));
 			tv2.setText(String.valueOf("my lat: " + location.getLatitude()));
 			tv3.setText(String.valueOf("my long: " + location.getLongitude()));
@@ -168,21 +169,9 @@ public class NavigationActivity extends ActionBarActivity implements SensorEvent
 	@Override
 	public void onSensorChanged(SensorEvent event) 
 	{
-		float degree = Math.round(event.values[0]);
-		tv6.setText("Compass heading: " + Float.toString(degree) + " degrees");
-		compass_image.setRotation(-degree);
-//		RotateAnimation ra = new RotateAnimation
-//		(
-//			currentDegree,
-//			-degree,
-//			Animation.RELATIVE_TO_SELF, 0.5f,
-//			Animation.RELATIVE_TO_SELF,
-//			0.5f
-//		);		
-//		ra.setDuration(210);		
-//		ra.setFillAfter(true);		
-//		compass_image.startAnimation(ra);
-//		currentDegree = -degree;
+		heading = Math.round(event.values[0]);
+		tv6.setText("Compass heading: " + Float.toString(heading) + " degrees");
+		compass_image.setRotation(-(heading - bearing));
 	}
 
 }
