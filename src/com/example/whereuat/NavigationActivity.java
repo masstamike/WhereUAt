@@ -3,12 +3,15 @@ package com.example.whereuat;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.Date;
+import java.util.Locale;
 
 import com.google.android.gms.maps.model.LatLng;
 
 import android.support.v7.app.ActionBarActivity;
 import android.support.v4.app.Fragment;
 import android.content.Context;
+import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -16,6 +19,7 @@ import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,12 +37,8 @@ public class NavigationActivity extends ActionBarActivity implements SensorEvent
 	float currentDistance, heading, bearing;
 	float currentDegree = 0f;
 	final double METERS_TO_MILES = 0.0006213f;
+	String destination_name;
 	TextView tv1;
-	TextView tv2;
-	TextView tv3;
-	TextView tv4;
-	TextView tv5;
-	TextView tv6;
 	ImageView compass_image;
 	Location dest;	
     LocationManager mLocationManager;
@@ -52,11 +52,7 @@ public class NavigationActivity extends ActionBarActivity implements SensorEvent
 			// Update navigation metrics
 			currentDistance = location.distanceTo(dest);
 			bearing = location.bearingTo(dest);
-			tv1.setText("dest: " + getIntent().getStringExtra("name"));
-			tv2.setText(String.valueOf("my lat: " + location.getLatitude()));
-			tv3.setText(String.valueOf("my long: " + location.getLongitude()));
-			tv4.setText("distance: " + getDistanceString(location.distanceTo(dest)));
-			tv5.setText(String.valueOf("bearing: " + location.bearingTo(dest)));
+			tv1.setText(getDistanceString(currentDistance));
 		}
 
 		@Override
@@ -89,15 +85,16 @@ public class NavigationActivity extends ActionBarActivity implements SensorEvent
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
 		
+		// Lock portrait mode
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+		
 		// Set views
 		tv1 = (TextView) findViewById(R.id.textView1);
-		tv2 = (TextView) findViewById(R.id.textView2);
-		tv3 = (TextView) findViewById(R.id.textView3);
-		tv4 = (TextView) findViewById(R.id.textView4);
-		tv5 = (TextView) findViewById(R.id.textView5);
-		tv6 = (TextView) findViewById(R.id.textView6);	
 		
 		compass_image = (ImageView) findViewById(R.id.imageView1);
+		
+		destination_name = getIntent().getStringExtra("name");
+		setTitle("Navigating to " + destination_name);
 		
 		// Receive destination location from intent
 		LatLng destination = new LatLng(getIntent().getDoubleExtra("lat", 0.0), getIntent().getDoubleExtra("long", 0.0));
@@ -118,6 +115,7 @@ public class NavigationActivity extends ActionBarActivity implements SensorEvent
 	protected void onResume()
 	{
 		super.onResume();
+		setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
 		mSensorManager.registerListener(this, mSensorManager.getDefaultSensor(Sensor.TYPE_ORIENTATION), SensorManager.SENSOR_DELAY_GAME);
 	}
 	
@@ -152,9 +150,9 @@ public class NavigationActivity extends ActionBarActivity implements SensorEvent
 	{
 		double miles = meters*METERS_TO_MILES;
 		if(miles > 0.1)
-			return String.valueOf(round(miles, 2) + " miles");
+			return String.valueOf(round(miles, 1) + " miles");
 		else
-			return String.valueOf(round(miles*5280, 2) + " feet");
+			return String.valueOf(Math.floor(miles*5280) + "feet");
 	}
 	
 	public static double round(double value, int places) {
@@ -192,8 +190,14 @@ public class NavigationActivity extends ActionBarActivity implements SensorEvent
 	public void onSensorChanged(SensorEvent event) 
 	{
 		heading = Math.round(event.values[0]); // Temporary fix for magnetic declination 
-		tv6.setText("Compass heading: " + Float.toString(heading) + " degrees");
 		compass_image.setRotation(-(heading - bearing));
+	}
+	
+	public void launchMaps(View v)
+	{
+		String loc_string = String.format("%f,%f", dest.getLatitude(), dest.getLongitude());
+		Intent i = new Intent(Intent.ACTION_VIEW, Uri.parse("google.navigation:q=" + loc_string)); 
+			startActivity(i);
 	}
 
 }
