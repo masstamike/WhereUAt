@@ -166,10 +166,10 @@ public class NavigationActivity extends ActionBarActivity implements SensorEvent
 	/**
 	 * A placeholder fragment containing a simple view.
 	 */
-	public static class PlaceholderFragment extends Fragment {
-
-		public PlaceholderFragment() {
-		}
+	public static class PlaceholderFragment extends Fragment
+	{
+		public PlaceholderFragment() 
+		{}
 
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -181,9 +181,9 @@ public class NavigationActivity extends ActionBarActivity implements SensorEvent
 	}
 
 	@Override
-	public void onAccuracyChanged(Sensor arg0, int arg1) {
-		// TODO Auto-generated method stub
-		
+	public void onAccuracyChanged(Sensor arg0, int arg1) 
+	{
+		// TODO Auto-generated method stub		
 	}
 
 	@Override
