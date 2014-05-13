@@ -2,10 +2,12 @@ package com.example.whereuat;
 
 import java.util.Calendar;
 
+import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.Dialog;
 import android.app.DialogFragment;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
@@ -16,12 +18,15 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.DatePicker;
+import android.widget.EditText;
 import android.widget.TimePicker;
 
 public class NewEventActivity extends ActionBarActivity 
 {
-
-	private double latitude, longitude;
+	public static int hour, minute, day, month, year;
+	public double latitude, longitude;
+	public String title;
+	
 	
 	@Override	
 	protected void onCreate(Bundle savedInstanceState) 
@@ -35,8 +40,11 @@ public class NewEventActivity extends ActionBarActivity
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
 		
-		latitude = getIntent().getDoubleExtra("lat", 0.0);
-		longitude = getIntent().getDoubleExtra("long", 0.0);
+		Bundle extras = getIntent().getExtras();
+		if (extras != null) {
+			latitude = extras.getDouble("lat");
+			longitude = extras.getDouble("long");
+		}
 	}
 
 	@Override
@@ -88,8 +96,8 @@ public class NewEventActivity extends ActionBarActivity
 		{
 			// Use the current time as the default values for the picker
 			final Calendar c = Calendar.getInstance();
-			int hour = c.get(Calendar.HOUR_OF_DAY);
-			int minute = c.get(Calendar.MINUTE);
+			hour = c.get(Calendar.HOUR_OF_DAY);
+			minute = c.get(Calendar.MINUTE);
 
 			// Create a new instance of TimePickerDialog and return it
 			return new TimePickerDialog(getActivity(), this, hour, minute,
@@ -116,9 +124,9 @@ public class NewEventActivity extends ActionBarActivity
 		{
 			// Use the current date as the default date in the picker
 			final Calendar c = Calendar.getInstance();
-			int year = c.get(Calendar.YEAR);
-			int month = c.get(Calendar.MONTH);
-			int day = c.get(Calendar.DAY_OF_MONTH);
+			year = c.get(Calendar.YEAR);
+			month = c.get(Calendar.MONTH);
+			day = c.get(Calendar.DAY_OF_MONTH);
 
 			// Create a new instance of DatePickerDialog and return it
 			return new DatePickerDialog(getActivity(), this, year, month, day);
@@ -134,5 +142,22 @@ public class NewEventActivity extends ActionBarActivity
 	{
 	    DialogFragment newFragment = new DatePickerFragment();
 	    newFragment.show(getFragmentManager(), "datePicker");
+	}
+	
+	public void submitEvent(View v)
+	{
+		EditText eTitle = (EditText)findViewById(R.id.editText1); 
+		title = eTitle.getText().toString();
+		Intent resultIntent = new Intent();
+		resultIntent.putExtra("title", title);
+		resultIntent.putExtra("hour", hour);
+		resultIntent.putExtra("minute", minute);
+		resultIntent.putExtra("day", day);
+		resultIntent.putExtra("month", month);
+		resultIntent.putExtra("year", year);
+		resultIntent.putExtra("lat", latitude);
+		resultIntent.putExtra("long", longitude);
+		setResult(Activity.RESULT_OK, resultIntent);
+		finish();
 	}
 }
