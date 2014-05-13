@@ -56,12 +56,16 @@
 
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
+<<<<<<< HEAD
             android:value="AIzaSyCu9v2JSkoLyCC8fHoOzlgWF_-vTn7ylZM" />
 
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
+=======
+            android:value="AIzaSyDCR53YYJelzhRHz6IUDQi8mJTeGWvr82U" />
+>>>>>>> 4a6a3eb3cfae4eacbf1c1a175a53ea5e82ce0a54
 
         <activity
             android:name="com.example.whereuat.NavigationActivity"

@@ -8,47 +8,9 @@
 
     	<RelativeLayout
     	    android:layout_width="match_parent"
-    	    android:layout_height="match_parent" >
-
-    	    <TextView
-    	        android:id="@+id/textView1"
-    	        android:layout_width="wrap_content"
-    	        android:layout_height="wrap_content"
-    	        android:layout_alignParentLeft="true"
-    	        android:layout_alignParentTop="true"
-    	        android:text="TextView" />
-
-    	    <TextView
-    	        android:id="@+id/textView3"
-    	        android:layout_width="wrap_content"
-    	        android:layout_height="wrap_content"
-    	        android:layout_alignParentLeft="true"
-    	        android:layout_below="@+id/textView1"
-    	        android:text="TextView" />
-
-    	    <TextView
-    	        android:id="@+id/textView2"
-    	        android:layout_width="wrap_content"
-    	        android:layout_height="wrap_content"
-    	        android:layout_alignParentLeft="true"
-    	        android:layout_below="@+id/textView3"
-    	        android:text="TextView" />
-
-    	    <TextView
-    	        android:id="@+id/textView4"
-    	        android:layout_width="wrap_content"
-    	        android:layout_height="wrap_content"
-    	        android:layout_alignParentLeft="true"
-    	        android:layout_below="@+id/textView2"
-    	        android:text="TextView" />
-
-    	    <TextView
-    	        android:id="@+id/textView5"
-    	        android:layout_width="wrap_content"
-    	        android:layout_height="wrap_content"
-    	        android:layout_alignParentLeft="true"
-    	        android:layout_below="@+id/textView4"
-    	        android:text="TextView" />
+    	    android:layout_height="match_parent"
+    	    android:background="@drawable/nav_bg"
+    	    android:paddingTop="0dp" >
 
     	    <ImageView
     	        android:id="@+id/imageView1"
@@ -60,12 +22,25 @@
     	        android:src="@drawable/compass" />
 
     	    <TextView
-    	        android:id="@+id/textView6"
+    	        android:id="@+id/textView1"
+    	        android:layout_width="wrap_content"
+    	        android:layout_height="wrap_content"
+    	        android:layout_alignParentTop="true"
+    	        android:layout_centerHorizontal="true"
+    	        android:paddingTop="10dp"
+    	        android:text="..."
+    	        android:textAppearance="?android:attr/textAppearanceLarge"
+    	        android:textSize="50sp"
+    	        android:textStyle="bold" />
+
+    	    <Button
+    	        android:id="@+id/button1"
     	        android:layout_width="wrap_content"
     	        android:layout_height="wrap_content"
     	        android:layout_alignParentBottom="true"
     	        android:layout_centerHorizontal="true"
-    	        android:text="TextView" />
+    	        android:onClick="launchMaps"
+    	        android:text="Launch Google Maps" />
 
     	</RelativeLayout>
 

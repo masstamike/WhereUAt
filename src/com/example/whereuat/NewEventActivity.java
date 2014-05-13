@@ -18,21 +18,30 @@ import android.view.ViewGroup;
 import android.widget.DatePicker;
 import android.widget.TimePicker;
 
-public class NewEventActivity extends ActionBarActivity {
+public class NewEventActivity extends ActionBarActivity 
+{
 
-	@Override
-	protected void onCreate(Bundle savedInstanceState) {
+	private double latitude, longitude;
+	
+	@Override	
+	protected void onCreate(Bundle savedInstanceState) 
+	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_new_event);
 
-		if (savedInstanceState == null) {
+		if (savedInstanceState == null) 
+		{
 			getSupportFragmentManager().beginTransaction()
 					.add(R.id.container, new PlaceholderFragment()).commit();
 		}
+		
+		latitude = getIntent().getDoubleExtra("lat", 0.0);
+		longitude = getIntent().getDoubleExtra("long", 0.0);
 	}
 
 	@Override
-	public boolean onCreateOptionsMenu(Menu menu) {
+	public boolean onCreateOptionsMenu(Menu menu) 
+	{
 
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.new_event, menu);
@@ -40,12 +49,14 @@ public class NewEventActivity extends ActionBarActivity {
 	}
 
 	@Override
-	public boolean onOptionsItemSelected(MenuItem item) {
+	public boolean onOptionsItemSelected(MenuItem item) 
+	{
 		// Handle action bar item clicks here. The action bar will
 		// automatically handle clicks on the Home/Up button, so long
 		// as you specify a parent activity in AndroidManifest.xml.
 		int id = item.getItemId();
-		if (id == R.id.action_settings) {
+		if (id == R.id.action_settings) 
+		{
 			return true;
 		}
 		return super.onOptionsItemSelected(item);
@@ -54,14 +65,14 @@ public class NewEventActivity extends ActionBarActivity {
 	/**
 	 * A placeholder fragment containing a simple view.
 	 */
-	public static class PlaceholderFragment extends Fragment {
-
-		public PlaceholderFragment() {
-		}
+	public static class PlaceholderFragment extends Fragment 
+	{
+		public PlaceholderFragment(){}
 
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
-				Bundle savedInstanceState) {
+				Bundle savedInstanceState) 
+		{
 			View rootView = inflater.inflate(R.layout.fragment_new_event,
 					container, false);
 			return rootView;
@@ -70,10 +81,11 @@ public class NewEventActivity extends ActionBarActivity {
 	
 	// http://developer.android.com/guide/topics/ui/controls/pickers.html
 	public static class TimePickerFragment extends DialogFragment
-    implements TimePickerDialog.OnTimeSetListener {
-
+    implements TimePickerDialog.OnTimeSetListener
+    {
 		@Override
-		public Dialog onCreateDialog(Bundle savedInstanceState) {
+		public Dialog onCreateDialog(Bundle savedInstanceState) 
+		{
 			// Use the current time as the default values for the picker
 			final Calendar c = Calendar.getInstance();
 			int hour = c.get(Calendar.HOUR_OF_DAY);
@@ -84,12 +96,14 @@ public class NewEventActivity extends ActionBarActivity {
 					DateFormat.is24HourFormat(getActivity()));
 		}
 
-		public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+		public void onTimeSet(TimePicker view, int hourOfDay, int minute) 
+		{
 			// Do something with the time chosen by the user
 		}
 	}
 	
-	public void showTimePickerDialog(View v) {
+	public void showTimePickerDialog(View v)
+	{
 	    DialogFragment newFragment = new TimePickerFragment();
 	    newFragment.show(getFragmentManager(), "timePicker");
 	}
@@ -98,7 +112,8 @@ public class NewEventActivity extends ActionBarActivity {
     implements DatePickerDialog.OnDateSetListener {
 
 		@Override
-		public Dialog onCreateDialog(Bundle savedInstanceState) {
+		public Dialog onCreateDialog(Bundle savedInstanceState) 
+		{
 			// Use the current date as the default date in the picker
 			final Calendar c = Calendar.getInstance();
 			int year = c.get(Calendar.YEAR);
@@ -109,12 +124,14 @@ public class NewEventActivity extends ActionBarActivity {
 			return new DatePickerDialog(getActivity(), this, year, month, day);
 		}
 
-		public void onDateSet(DatePicker view, int year, int month, int day) {
+		public void onDateSet(DatePicker view, int year, int month, int day) 
+		{
 			// Do something with the date chosen by the user
 		}
 	}
 
-	public void showDatePickerDialog(View v) {
+	public void showDatePickerDialog(View v) 
+	{
 	    DialogFragment newFragment = new DatePickerFragment();
 	    newFragment.show(getFragmentManager(), "datePicker");
 	}
