@@ -189,7 +189,7 @@ public class NavigationActivity extends ActionBarActivity implements SensorEvent
 	@Override
 	public void onSensorChanged(SensorEvent event) 
 	{
-		heading = Math.round(event.values[0]); // Temporary fix for magnetic declination 
+		heading = Math.round(event.values[0]);
 		compass_image.setRotation(-(heading - bearing));
 	}
 	
