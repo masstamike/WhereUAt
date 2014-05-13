@@ -27,13 +27,15 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class MainActivity extends ActionBarActivity implements
-		OnMapLongClickListener {
+public class MainActivity extends ActionBarActivity implements OnMapLongClickListener, OnMarkerClickListener
+{
 	final Context context = this;
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
@@ -95,57 +97,61 @@ public class MainActivity extends ActionBarActivity implements
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		map.setOnMapLongClickListener((OnMapLongClickListener) this);
-
-		Fragment fragment = new PlaceFragment();
-		Bundle args = new Bundle();
-		args.putInt(PlaceFragment.ARG_PLACE_NUMBER, 0);
-		fragment.setArguments(args);
-
-		mPlaceTitles = getResources().getStringArray(R.array.places_array);
-		mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
-		mDrawerLayout.setSelected(true);
-		mDrawerList = (ListView) findViewById(R.id.left_drawer);
-		mDrawerList.setAdapter(new ArrayAdapter<String>(this,
-				R.layout.drawer_list_item, mPlaceTitles));
-		mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
-	}
-
-	public void onClick_Taipei() {
-		CameraUpdate update = CameraUpdateFactory.newLatLngZoom(LOC_TAIPEI, 18);
-		map.animateCamera(update);
-		nav_lat = LOC_TAIPEI.latitude;
-		nav_long = LOC_TAIPEI.longitude;
-	}
-
-	public void onClick_Chico() {
-		CameraUpdate update = CameraUpdateFactory.newLatLngZoom(LOC_CHICO, 18);
-		map.animateCamera(update);
-		nav_lat = LOC_CHICO.latitude;
-		nav_long = LOC_CHICO.longitude;
-	}
-
-	public void onClick_Home() {
-		CameraUpdate update = CameraUpdateFactory.newLatLngZoom(LOC_HOME, 18);
-		map.animateCamera(update);
-		nav_lat = LOC_HOME.latitude;
-		nav_long = LOC_HOME.longitude;
-	}
-
-	public void onClick_Toggle() {
-		if (map.getMapType() != GoogleMap.MAP_TYPE_SATELLITE)
-			map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
-		else
-			map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-	}
-
-	public void onClick_myLocation() {
-		try {
-			Location myLoc = map.getMyLocation();
+        map.setOnMapLongClickListener(this);
+        map.setOnMarkerClickListener(this);
+        
+        Fragment fragment = new PlaceFragment();
+        Bundle args = new Bundle();
+        args.putInt(PlaceFragment.ARG_PLACE_NUMBER, 0);
+        fragment.setArguments(args);
+        
+        mPlaceTitles = getResources().getStringArray(R.array.places_array);
+        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout.setSelected(true);
+        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
+                R.layout.drawer_list_item, mPlaceTitles));
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+   }
+    
+    public void onClick_Taipei()
+    {
+    	CameraUpdate update = CameraUpdateFactory.newLatLngZoom(LOC_TAIPEI, 18);    	
+    	map.animateCamera(update);
+    	nav_lat = LOC_TAIPEI.latitude;
+    	nav_long = LOC_TAIPEI.longitude;
+    }
+    
+    public void onClick_Chico()
+    {
+    	CameraUpdate update = CameraUpdateFactory.newLatLngZoom(LOC_CHICO, 18);
+    	map.animateCamera(update);   
+    	nav_lat = LOC_CHICO.latitude;
+    	nav_long = LOC_CHICO.longitude;
+    }
+    
+    public void onClick_Home()
+    {
+    	CameraUpdate update = CameraUpdateFactory.newLatLngZoom(LOC_HOME, 18);
+    	map.animateCamera(update);
+    	nav_lat = LOC_HOME.latitude;
+    	nav_long = LOC_HOME.longitude;
+    }
+    
+    public void onClick_Toggle()
+    {
+    	if(map.getMapType() != GoogleMap.MAP_TYPE_SATELLITE)
+    		map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+    	else
+    		map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+    }
+    
+    public void onClick_myLocation()
+    {
+    	try {
+    		Location myLoc = map.getMyLocation();
 			LOC_ME = new LatLng(myLoc.getLatitude(), myLoc.getLongitude());
-			map.addMarker(new MarkerOptions().position(LOC_ME).title(
-					"You are here!"));
+			map.addMarker(new MarkerOptions().position(LOC_ME).title("Party at my house"));
 			CameraUpdate update = CameraUpdateFactory.newLatLngZoom(LOC_ME, 19);
 			map.animateCamera(update);
 			nav_lat = LOC_ME.latitude;
@@ -274,9 +280,41 @@ public class MainActivity extends ActionBarActivity implements
 				// title, latitude, longitude, hour, minute, day, month, and year are
 				// ready to be incorporated into a pin.
 			}
+		}
 			break;
 		}
-		}
+	}
+	@Override
+	public boolean onMarkerClick(final Marker marker) 
+	{
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+		alertDialogBuilder.setTitle(marker.getTitle());
+		alertDialogBuilder.setIcon(R.drawable.whereuat);
+		alertDialogBuilder
+			.setMessage("Navigate to this event?")
+			.setCancelable(false)
+			.setPositiveButton("Yes", new DialogInterface.OnClickListener()
+			{
+				public void onClick(DialogInterface dialog, int id)
+				{
+					LatLng loc = marker.getPosition();
+					Intent nav_intent = new Intent(context, NavigationActivity.class);
+			    	nav_intent.putExtra("lat", loc.latitude);
+			    	nav_intent.putExtra("long", loc.longitude);
+			    	nav_intent.putExtra("name", marker.getTitle());
+			    	startActivity(nav_intent);
+				}
+			})
+			.setNegativeButton("No", new DialogInterface.OnClickListener()
+			{
+				public void onClick(DialogInterface dialog, int id)
+				{
+					dialog.cancel();
+				}
+			});
+		AlertDialog alertDialog = alertDialogBuilder.create();
+		alertDialog.show();
+		return true;
 	}
 
 }

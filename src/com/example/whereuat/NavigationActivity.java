@@ -152,7 +152,7 @@ public class NavigationActivity extends ActionBarActivity implements SensorEvent
 		if(miles > 0.1)
 			return String.valueOf(round(miles, 1) + " miles");
 		else
-			return String.valueOf(Math.floor(miles*5280) + "feet");
+			return String.valueOf((int)Math.floor(miles*5280) + " feet");
 	}
 	
 	public static double round(double value, int places) {
@@ -166,10 +166,10 @@ public class NavigationActivity extends ActionBarActivity implements SensorEvent
 	/**
 	 * A placeholder fragment containing a simple view.
 	 */
-	public static class PlaceholderFragment extends Fragment {
-
-		public PlaceholderFragment() {
-		}
+	public static class PlaceholderFragment extends Fragment
+	{
+		public PlaceholderFragment() 
+		{}
 
 		@Override
 		public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -181,9 +181,9 @@ public class NavigationActivity extends ActionBarActivity implements SensorEvent
 	}
 
 	@Override
-	public void onAccuracyChanged(Sensor arg0, int arg1) {
-		// TODO Auto-generated method stub
-		
+	public void onAccuracyChanged(Sensor arg0, int arg1) 
+	{
+		// TODO Auto-generated method stub		
 	}
 
 	@Override
