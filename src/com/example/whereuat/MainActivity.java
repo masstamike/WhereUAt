@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.MapFragment;
@@ -35,7 +36,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class MainActivity extends ActionBarActivity implements OnMapLongClickListener, OnMarkerClickListener
+public class MainActivity extends ActionBarActivity implements OnMapLongClickListener, OnInfoWindowClickListener
 {
 	final Context context = this;
 	private DrawerLayout mDrawerLayout;
@@ -98,8 +99,9 @@ public class MainActivity extends ActionBarActivity implements OnMapLongClickLis
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        map.setOnMapLongClickListener(this);
-        map.setOnMarkerClickListener(this);
+        
+		map.setOnMapLongClickListener(this);
+        map.setOnInfoWindowClickListener(this);
         
         Fragment fragment = new PlaceFragment();
         Bundle args = new Bundle();
@@ -310,8 +312,9 @@ public class MainActivity extends ActionBarActivity implements OnMapLongClickLis
 			break;
 		}
 	}
+
 	@Override
-	public boolean onMarkerClick(final Marker marker) 
+	public void onInfoWindowClick(final Marker marker)
 	{
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
 		alertDialogBuilder.setTitle(marker.getTitle());
@@ -340,7 +343,6 @@ public class MainActivity extends ActionBarActivity implements OnMapLongClickLis
 			});
 		AlertDialog alertDialog = alertDialogBuilder.create();
 		alertDialog.show();
-		return true;
 	}
 
 }
