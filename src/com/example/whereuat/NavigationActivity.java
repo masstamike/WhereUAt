@@ -152,7 +152,7 @@ public class NavigationActivity extends ActionBarActivity implements SensorEvent
 		if(miles > 0.1)
 			return String.valueOf(round(miles, 1) + " miles");
 		else
-			return String.valueOf(Math.floor(miles*5280) + "feet");
+			return String.valueOf((int)Math.floor(miles*5280) + " feet");
 	}
 	
 	public static double round(double value, int places) {

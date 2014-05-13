@@ -27,13 +27,15 @@ import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
+import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 
-public class MainActivity extends ActionBarActivity implements OnMapLongClickListener
+public class MainActivity extends ActionBarActivity implements OnMapLongClickListener, OnMarkerClickListener
 {
 	final Context context = this;
 	private DrawerLayout mDrawerLayout;
@@ -96,7 +98,8 @@ public class MainActivity extends ActionBarActivity implements OnMapLongClickLis
 			e.printStackTrace();
 		}
         
-        map.setOnMapLongClickListener((OnMapLongClickListener) this);
+        map.setOnMapLongClickListener(this);
+        map.setOnMarkerClickListener(this);
         
         Fragment fragment = new PlaceFragment();
         Bundle args = new Bundle();
@@ -149,7 +152,7 @@ public class MainActivity extends ActionBarActivity implements OnMapLongClickLis
     	try {
     		Location myLoc = map.getMyLocation();
 			LOC_ME = new LatLng(myLoc.getLatitude(), myLoc.getLongitude());
-			map.addMarker(new MarkerOptions().position(LOC_ME).title("You are here!"));
+			map.addMarker(new MarkerOptions().position(LOC_ME).title("Party at my house"));
 			CameraUpdate update = CameraUpdateFactory.newLatLngZoom(LOC_ME, 19);
 			map.animateCamera(update);
 	    	nav_lat = LOC_ME.latitude;
@@ -256,6 +259,40 @@ public class MainActivity extends ActionBarActivity implements OnMapLongClickLis
 			});
 		AlertDialog alertDialog = alertDialogBuilder.create();
 		alertDialog.show();
+	}
+
+
+	@Override
+	public boolean onMarkerClick(final Marker marker) 
+	{
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+		alertDialogBuilder.setTitle(marker.getTitle());
+		alertDialogBuilder.setIcon(R.drawable.whereuat);
+		alertDialogBuilder
+			.setMessage("Navigate to this event?")
+			.setCancelable(false)
+			.setPositiveButton("Yes", new DialogInterface.OnClickListener()
+			{
+				public void onClick(DialogInterface dialog, int id)
+				{
+					LatLng loc = marker.getPosition();
+					Intent nav_intent = new Intent(context, NavigationActivity.class);
+			    	nav_intent.putExtra("lat", loc.latitude);
+			    	nav_intent.putExtra("long", loc.longitude);
+			    	nav_intent.putExtra("name", marker.getTitle());
+			    	startActivity(nav_intent);
+				}
+			})
+			.setNegativeButton("No", new DialogInterface.OnClickListener()
+			{
+				public void onClick(DialogInterface dialog, int id)
+				{
+					dialog.cancel();
+				}
+			});
+		AlertDialog alertDialog = alertDialogBuilder.create();
+		alertDialog.show();
+		return true;
 	}
 
 }

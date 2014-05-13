@@ -40,7 +40,7 @@
     	        android:layout_alignParentBottom="true"
     	        android:layout_centerHorizontal="true"
     	        android:onClick="launchMaps"
-    	        android:text="Launch Google Maps" />
+    	        android:text="Launch Navigation" />
 
     	</RelativeLayout>
 
