@@ -2,11 +2,12 @@ package com.example.whereuat;
 
 import android.annotation.TargetApi;
 import android.app.Fragment;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
@@ -25,14 +26,16 @@ import android.widget.ListView;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
 
-public class MainActivity extends ActionBarActivity
+public class MainActivity extends ActionBarActivity implements OnMapLongClickListener
 {
+	final Context context = this;
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
 	private CharSequence mTitle;
@@ -93,6 +96,8 @@ public class MainActivity extends ActionBarActivity
 			e.printStackTrace();
 		}
         
+        map.setOnMapLongClickListener((OnMapLongClickListener) this);
+        
         Fragment fragment = new PlaceFragment();
         Bundle args = new Bundle();
         args.putInt(PlaceFragment.ARG_PLACE_NUMBER, 0);
@@ -100,6 +105,7 @@ public class MainActivity extends ActionBarActivity
         
         mPlaceTitles = getResources().getStringArray(R.array.places_array);
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+        mDrawerLayout.setSelected(true);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
         mDrawerList.setAdapter(new ArrayAdapter<String>(this,
                 R.layout.drawer_list_item, mPlaceTitles));
@@ -109,7 +115,6 @@ public class MainActivity extends ActionBarActivity
     public void onClick_Taipei()
     {
     	CameraUpdate update = CameraUpdateFactory.newLatLngZoom(LOC_TAIPEI, 18);    	
-    	map = ((MapFragment)getFragmentManager().findFragmentById(R.id.map)).getMap();
     	map.animateCamera(update);
     	nav_lat = LOC_TAIPEI.latitude;
     	nav_long = LOC_TAIPEI.longitude;
@@ -118,7 +123,6 @@ public class MainActivity extends ActionBarActivity
     public void onClick_Chico()
     {
     	CameraUpdate update = CameraUpdateFactory.newLatLngZoom(LOC_CHICO, 18);
-    	map = ((MapFragment)getFragmentManager().findFragmentById(R.id.map)).getMap();
     	map.animateCamera(update);   
     	nav_lat = LOC_CHICO.latitude;
     	nav_long = LOC_CHICO.longitude;
@@ -127,7 +131,6 @@ public class MainActivity extends ActionBarActivity
     public void onClick_Home()
     {
     	CameraUpdate update = CameraUpdateFactory.newLatLngZoom(LOC_HOME, 18);
-    	map = ((MapFragment)getFragmentManager().findFragmentById(R.id.map)).getMap();
     	map.animateCamera(update);
     	nav_lat = LOC_HOME.latitude;
     	nav_long = LOC_HOME.longitude;
@@ -135,7 +138,6 @@ public class MainActivity extends ActionBarActivity
     
     public void onClick_Toggle()
     {
-    	map = ((MapFragment)getFragmentManager().findFragmentById(R.id.map)).getMap();
     	if(map.getMapType() != GoogleMap.MAP_TYPE_SATELLITE)
     		map.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
     	else
@@ -196,6 +198,7 @@ public class MainActivity extends ActionBarActivity
         	case R.id.action_add:
         		//open new activity to create event
         		Intent intent = new Intent(this, NewEventActivity.class);
+        		// add coords
         	    startActivity(intent);
         		return true;
             case R.id.action_swap_map:
@@ -223,4 +226,36 @@ public class MainActivity extends ActionBarActivity
                 return super.onOptionsItemSelected(item);
         }
     }
+
+
+	@Override
+	public void onMapLongClick(final LatLng point) 
+	{
+		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
+		alertDialogBuilder.setTitle("New event");
+		alertDialogBuilder.setIcon(R.drawable.whereuat);
+		alertDialogBuilder
+			.setMessage("Create a new event at this location?")
+			.setCancelable(false)
+			.setPositiveButton("Yes", new DialogInterface.OnClickListener()
+			{
+				public void onClick(DialogInterface dialog, int id)
+				{
+					Intent add_intent = new Intent(context, NewEventActivity.class);
+					add_intent.putExtra("lat", point.latitude);
+					add_intent.putExtra("long", point.longitude);
+					startActivity(add_intent);
+				}
+			})
+			.setNegativeButton("No", new DialogInterface.OnClickListener()
+			{
+				public void onClick(DialogInterface dialog, int id)
+				{
+					dialog.cancel();
+				}
+			});
+		AlertDialog alertDialog = alertDialogBuilder.create();
+		alertDialog.show();
+	}
+
 }
