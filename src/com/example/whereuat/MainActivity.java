@@ -266,7 +266,7 @@ public class MainActivity extends ActionBarActivity implements OnMapLongClickLis
 		switch (requestCode) {
 		case (0): {
 			if (resultCode == Activity.RESULT_OK) {
-				Bundle extras = getIntent().getExtras();
+				Bundle extras = data.getExtras();
 				if (extras != null) {
 					String newText = extras.getString("title");
 					double latitude = extras.getDouble("lat");
