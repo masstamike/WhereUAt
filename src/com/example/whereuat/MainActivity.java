@@ -22,6 +22,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -267,7 +268,8 @@ public class MainActivity extends ActionBarActivity implements OnMapLongClickLis
 		case (0): {
 			if (resultCode == Activity.RESULT_OK) {
 				Bundle extras = data.getExtras();
-				if (extras != null) {
+
+				if (extras != null) {					
 					String newText = extras.getString("title");
 					double latitude = extras.getDouble("lat");
 					double longitude = extras.getDouble("long");
@@ -276,6 +278,14 @@ public class MainActivity extends ActionBarActivity implements OnMapLongClickLis
 					int day = extras.getInt("day");
 					int month = extras.getInt("month");
 					int year = extras.getInt("year");
+					LatLng marker_position = new LatLng(latitude, longitude);
+					String info_snippet = String.format
+					(
+							"Time: %d:%d\nDate: %d/%d/%d\n",
+							hour, minute, month, day, year
+					);
+					map.addMarker(new MarkerOptions().position(marker_position).title(newText).snippet(info_snippet));
+					Toast.makeText(getApplicationContext(), "Event created", Toast.LENGTH_LONG).show();
 				}
 				// title, latitude, longitude, hour, minute, day, month, and year are
 				// ready to be incorporated into a pin.
@@ -291,7 +301,7 @@ public class MainActivity extends ActionBarActivity implements OnMapLongClickLis
 		alertDialogBuilder.setTitle(marker.getTitle());
 		alertDialogBuilder.setIcon(R.drawable.whereuat);
 		alertDialogBuilder
-			.setMessage("Navigate to this event?")
+			.setMessage(marker.getSnippet() + "\nNavigate to this event?")
 			.setCancelable(false)
 			.setPositiveButton("Yes", new DialogInterface.OnClickListener()
 			{
