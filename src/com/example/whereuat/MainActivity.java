@@ -27,6 +27,7 @@ import android.widget.Toast;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.MapFragment;
@@ -35,7 +36,7 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 @TargetApi(Build.VERSION_CODES.HONEYCOMB)
-public class MainActivity extends ActionBarActivity implements OnMapLongClickListener, OnMarkerClickListener
+public class MainActivity extends ActionBarActivity implements OnMapLongClickListener, OnInfoWindowClickListener
 {
 	final Context context = this;
 	private DrawerLayout mDrawerLayout;
@@ -98,8 +99,9 @@ public class MainActivity extends ActionBarActivity implements OnMapLongClickLis
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-        map.setOnMapLongClickListener(this);
-        map.setOnMarkerClickListener(this);
+        
+		map.setOnMapLongClickListener(this);
+        map.setOnInfoWindowClickListener(this);
         
         Fragment fragment = new PlaceFragment();
         Bundle args = new Bundle();
@@ -113,6 +115,24 @@ public class MainActivity extends ActionBarActivity implements OnMapLongClickLis
         mDrawerList.setAdapter(new ArrayAdapter<String>(this,
                 R.layout.drawer_list_item, mPlaceTitles));
         mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        
+        // Start tutorial
+        AlertDialog.Builder ab = new AlertDialog.Builder(context);
+        ab.setTitle("Welcome to WhereUAt!")
+        	.setMessage("-WhereUAt is a social meetup application.\n"
+			+ "-Long press anywhere on the map to create a new event.\n"
+			+ "-To view a list of events, slide the drawer out from the left side of your screen.\n"
+			+ "-Touch a pin for details about the event and navigation options.\n")
+			.setInverseBackgroundForced(true)
+        	.setNeutralButton("Ok", new DialogInterface.OnClickListener()
+        	{
+				public void onClick(DialogInterface dialog, int id)
+				{
+					dialog.cancel();
+				}
+        	});
+        AlertDialog alertDialog = ab.create();
+        alertDialog.show();
    }
     
     public void onClick_Taipei()
@@ -267,6 +287,7 @@ public class MainActivity extends ActionBarActivity implements OnMapLongClickLis
 		switch (requestCode) {
 		case (0): {
 			if (resultCode == Activity.RESULT_OK) {
+				
 				Bundle extras = data.getExtras();
 
 				if (extras != null) {					
@@ -287,15 +308,14 @@ public class MainActivity extends ActionBarActivity implements OnMapLongClickLis
 					map.addMarker(new MarkerOptions().position(marker_position).title(newText).snippet(info_snippet));
 					Toast.makeText(getApplicationContext(), "Event created", Toast.LENGTH_LONG).show();
 				}
-				// title, latitude, longitude, hour, minute, day, month, and year are
-				// ready to be incorporated into a pin.
 			}
 		}
 			break;
 		}
 	}
+
 	@Override
-	public boolean onMarkerClick(final Marker marker) 
+	public void onInfoWindowClick(final Marker marker)
 	{
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);
 		alertDialogBuilder.setTitle(marker.getTitle());
@@ -324,7 +344,6 @@ public class MainActivity extends ActionBarActivity implements OnMapLongClickLis
 			});
 		AlertDialog alertDialog = alertDialogBuilder.create();
 		alertDialog.show();
-		return true;
 	}
 
 }
