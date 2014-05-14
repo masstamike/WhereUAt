@@ -241,12 +241,6 @@ public class MainActivity extends ActionBarActivity implements OnMapLongClickLis
 	public boolean onOptionsItemSelected(MenuItem item) {
 		// Handle presses on the action bar items
 		switch (item.getItemId()) {
-		case R.id.action_add:
-			// open new activity to create event
-			Intent intent = new Intent(this, NewEventActivity.class);
-			// add coords
-			startActivity(intent);
-			return true;
 		case R.id.action_swap_map:
 			onClick_Toggle();
 			return true;
@@ -264,9 +258,6 @@ public class MainActivity extends ActionBarActivity implements OnMapLongClickLis
 				e.printStackTrace();
 				Log.d("Error", "Error pushing navigation menu button.");
 			}
-			return true;
-		case R.id.action_settings:
-			// openSettings();
 			return true;
 		default:
 			return super.onOptionsItemSelected(item);
@@ -322,13 +313,19 @@ public class MainActivity extends ActionBarActivity implements OnMapLongClickLis
 					LatLng marker_position = new LatLng(latitude, longitude);
 					String info_snippet = String.format
 					(
-							"Time: %d:%d\nDate: %d/%d/%d\n",
-							hour, minute, month, day, year
+							"Time: %d:%02d\nDate: %d/%d/%d\n",
+							hour, minute, month+1, day, year
 					);
 					map.addMarker(new MarkerOptions().position(marker_position).title(newText).snippet(info_snippet));
 					mPlaceTitles.add(newText);
 					mapEvents.put(newText, marker_position);
 					lookupEvents.put(mapEvents.size(), newText);
+			        mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
+			        mDrawerLayout.setSelected(true);
+			        mDrawerList = (ListView) findViewById(R.id.left_drawer);
+			        mDrawerList.setAdapter(new ArrayAdapter<String>(this,
+			                R.layout.drawer_list_item, mPlaceTitles));
+			        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
 					Toast.makeText(getApplicationContext(), "Event created", Toast.LENGTH_LONG).show();
 				}
 			}

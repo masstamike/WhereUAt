@@ -293,7 +293,6 @@ int drawable ic_plusone_tall_off_client 0x7f020078
 int drawable nav_bg 0x7f020079
 int drawable whereuat 0x7f02007a
 int drawable whereuat2 0x7f02007b
-int id action_add 0x7f06004b
 int id action_bar 0x7f06001f
 int id action_bar_activity_content 0x7f060018
 int id action_bar_container 0x7f06001e
@@ -306,10 +305,10 @@ int id action_menu_divider 0x7f060019
 int id action_menu_presenter 0x7f06001a
 int id action_mode_close_button 0x7f060027
 int id action_settings 0x7f06004a
-int id action_swap_map 0x7f06004c
+int id action_swap_map 0x7f06004b
 int id activity_chooser_view_content 0x7f060028
 int id always 0x7f06000f
-int id begin_navigation 0x7f06004d
+int id begin_navigation 0x7f06004c
 int id beginning 0x7f060014
 int id button1 0x7f060045
 int id checkBox1 0x7f060049

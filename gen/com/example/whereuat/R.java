@@ -1190,7 +1190,6 @@ containing a value of this type.
         public static final int whereuat2=0x7f02007b;
     }
     public static final class id {
-        public static final int action_add=0x7f06004b;
         public static final int action_bar=0x7f06001f;
         public static final int action_bar_activity_content=0x7f060018;
         public static final int action_bar_container=0x7f06001e;
@@ -1203,10 +1202,10 @@ containing a value of this type.
         public static final int action_menu_presenter=0x7f06001a;
         public static final int action_mode_close_button=0x7f060027;
         public static final int action_settings=0x7f06004a;
-        public static final int action_swap_map=0x7f06004c;
+        public static final int action_swap_map=0x7f06004b;
         public static final int activity_chooser_view_content=0x7f060028;
         public static final int always=0x7f06000f;
-        public static final int begin_navigation=0x7f06004d;
+        public static final int begin_navigation=0x7f06004c;
         public static final int beginning=0x7f060014;
         public static final int button1=0x7f060045;
         public static final int checkBox1=0x7f060049;

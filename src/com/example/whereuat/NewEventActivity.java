@@ -23,7 +23,7 @@ import android.widget.TimePicker;
 
 public class NewEventActivity extends ActionBarActivity 
 {
-	public static int hour, minute, day, month, year;
+	public static int m_hour, m_minute, m_day, m_month, m_year;
 	public double latitude, longitude;
 	public String title;
 	
@@ -46,11 +46,6 @@ public class NewEventActivity extends ActionBarActivity
 			longitude = extras.getDouble("long");
 		}
 		
-		// Use the current date as the default date in the picker
-					final Calendar c = Calendar.getInstance();
-					year = c.get(Calendar.YEAR);
-					month = c.get(Calendar.MONTH);
-					day = c.get(Calendar.DAY_OF_MONTH);
 	}
 
 	@Override
@@ -102,8 +97,8 @@ public class NewEventActivity extends ActionBarActivity
 		{
 			// Use the current time as the default values for the picker
 			final Calendar c = Calendar.getInstance();
-			hour = c.get(Calendar.HOUR_OF_DAY);
-			minute = c.get(Calendar.MINUTE);
+			int hour = c.get(Calendar.HOUR_OF_DAY);
+			int minute = c.get(Calendar.MINUTE);
 
 			// Create a new instance of TimePickerDialog and return it
 			return new TimePickerDialog(getActivity(), this, hour, minute,
@@ -112,6 +107,8 @@ public class NewEventActivity extends ActionBarActivity
 
 		public void onTimeSet(TimePicker view, int hourOfDay, int minute) 
 		{
+			m_hour = hourOfDay;
+			m_minute = minute;
 			// Do something with the time chosen by the user
 		}
 	}
@@ -128,13 +125,21 @@ public class NewEventActivity extends ActionBarActivity
 		@Override
 		public Dialog onCreateDialog(Bundle savedInstanceState) 
 		{
+			// Use the current date as the default date in the picker
+			final Calendar c = Calendar.getInstance();
+			int year = c.get(Calendar.YEAR);
+			int month = c.get(Calendar.MONTH);
+			int day = c.get(Calendar.DAY_OF_MONTH);
+
 			// Create a new instance of DatePickerDialog and return it
 			return new DatePickerDialog(getActivity(), this, year, month, day);
 		}
 
 		public void onDateSet(DatePicker view, int year, int month, int day) 
 		{
-			
+			m_year = year;
+			m_month = month;
+			m_day = day;
 		}
 	}
 
@@ -150,11 +155,11 @@ public class NewEventActivity extends ActionBarActivity
 		title = eTitle.getText().toString();
 		Intent resultIntent = new Intent();
 		resultIntent.putExtra("title", title);
-		resultIntent.putExtra("hour", hour);
-		resultIntent.putExtra("minute", minute);
-		resultIntent.putExtra("day", day);
-		resultIntent.putExtra("month", month);
-		resultIntent.putExtra("year", year);
+		resultIntent.putExtra("hour", m_hour);
+		resultIntent.putExtra("minute", m_minute);
+		resultIntent.putExtra("day", m_day);
+		resultIntent.putExtra("month", m_month);
+		resultIntent.putExtra("year", m_year);
 		resultIntent.putExtra("lat", latitude);
 		resultIntent.putExtra("long", longitude);
 		setResult(Activity.RESULT_OK, resultIntent);
