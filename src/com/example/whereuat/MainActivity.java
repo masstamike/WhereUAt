@@ -1,5 +1,9 @@
 package com.example.whereuat;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -7,6 +11,7 @@ import android.app.Fragment;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources.NotFoundException;
 import android.location.Location;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,7 +34,6 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.GoogleMap.OnInfoWindowClickListener;
 import com.google.android.gms.maps.GoogleMap.OnMapLongClickListener;
-import com.google.android.gms.maps.GoogleMap.OnMarkerClickListener;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -42,16 +46,19 @@ public class MainActivity extends ActionBarActivity implements OnMapLongClickLis
 	private DrawerLayout mDrawerLayout;
 	private ListView mDrawerList;
 	private CharSequence mTitle;
-	private String[] mPlaceTitles;
+	private ArrayList<String> mPlaceTitles = new ArrayList<String>();
 	private GoogleMap map;
 	private double nav_lat, nav_long;
+	LinkedHashMap<String, LatLng> mapEvents = new LinkedHashMap<String, LatLng>();
+	HashMap lookupEvents = new HashMap();
+	Object[] stringPlaceTitles;
 
 	// LatLng values
 	private final LatLng LOC_CHICO = new LatLng(39.729676, -121.847957);
 	private final LatLng LOC_HOME = new LatLng(38.945694, -121.119814);
 	private final LatLng LOC_TAIPEI = new LatLng(25.03364, 121.564956);
 
-	private LatLng LOC_ME,newLoc;
+	private LatLng LOC_ME;
 
 	private class DrawerItemClickListener implements
 			ListView.OnItemClickListener {
@@ -66,23 +73,22 @@ public class MainActivity extends ActionBarActivity implements OnMapLongClickLis
 	private void selectItem(int position) {
 		// Do something with the map
 		switch (position) {
-		case 1:
-			onClick_Taipei();
-			break;
-		case 2:
-			onClick_Chico();
-			break;
-		case 3:
-			onClick_Home();
-			break;
-		case 4:
+		case 0:
 			onClick_myLocation();
+			break;
+		default:
+			CameraUpdate update = CameraUpdateFactory.newLatLngZoom(
+					mapEvents.get(lookupEvents.get(position)), 15);
+	    	map.animateCamera(update);   
+	    	nav_lat = LOC_CHICO.latitude;
+	    	nav_long = LOC_CHICO.longitude;
 			break;
 		}
 
 		// Highlight the selected item, update the title, and close the drawer
 		mDrawerList.setItemChecked(position, true);
-		setTitle(mPlaceTitles[position]);
+		stringPlaceTitles = mPlaceTitles.toArray();
+		setTitle(stringPlaceTitles[position].toString());
 		mDrawerLayout.closeDrawer(mDrawerList);
 	}
 
@@ -108,7 +114,16 @@ public class MainActivity extends ActionBarActivity implements OnMapLongClickLis
         args.putInt(PlaceFragment.ARG_PLACE_NUMBER, 0);
         fragment.setArguments(args);
         
-        mPlaceTitles = getResources().getStringArray(R.array.places_array);
+        try {
+			mPlaceTitles.add("New Event");
+			//mPlaceTitles.add(getResources().getStringArray(R.array.places_array)[1]);
+			//mPlaceTitles.add(getResources().getStringArray(R.array.places_array)[2]);
+			//mPlaceTitles.add(getResources().getStringArray(R.array.places_array)[3]);
+		} catch (NotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerLayout.setSelected(true);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
@@ -172,11 +187,16 @@ public class MainActivity extends ActionBarActivity implements OnMapLongClickLis
     	try {
     		Location myLoc = map.getMyLocation();
 			LOC_ME = new LatLng(myLoc.getLatitude(), myLoc.getLongitude());
-			map.addMarker(new MarkerOptions().position(LOC_ME).title("Party at my house"));
 			CameraUpdate update = CameraUpdateFactory.newLatLngZoom(LOC_ME, 19);
 			map.animateCamera(update);
 			nav_lat = LOC_ME.latitude;
 			nav_long = LOC_ME.longitude;
+			Intent add_intent = new Intent(context,
+			NewEventActivity.class);
+			add_intent.putExtra("lat", nav_lat);
+			add_intent.putExtra("long", nav_long);
+			startActivityForResult(add_intent, 0);
+
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -306,6 +326,9 @@ public class MainActivity extends ActionBarActivity implements OnMapLongClickLis
 							hour, minute, month, day, year
 					);
 					map.addMarker(new MarkerOptions().position(marker_position).title(newText).snippet(info_snippet));
+					mPlaceTitles.add(newText);
+					mapEvents.put(newText, marker_position);
+					lookupEvents.put(mapEvents.size(), newText);
 					Toast.makeText(getApplicationContext(), "Event created", Toast.LENGTH_LONG).show();
 				}
 			}
